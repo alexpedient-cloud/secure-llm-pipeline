@@ -4,6 +4,8 @@ This project demonstrates a **secure CI/CD pipeline for AI and Large Language Mo
 
 The pipeline integrates multiple security scanners and LLM-specific tests to detect vulnerabilities, secrets, and prompt injection risks during development.
 
+Secure LLM Pipeline is a project that automatically checks AI applications for security problems before they are released. It works like a safety inspection for software: every time new code is added, the system runs a series of automated checks to find risks such as insecure code, vulnerable software libraries, hidden passwords or keys, and attempts to trick AI models with malicious prompts. By running these checks continuously in the development pipeline, the project helps developers catch security issues early and build safer AI systems.
+
 ---
 
 # Security Controls Implemented
