@@ -1,13 +1,12 @@
-name: Secure LLM Pipeline
+name: Secure LLM DevSecOps Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
 
 jobs:
-  security-scan:
+  security-pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,10 +23,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install bandit safety
 
-      - name: Run Static Security Scan (Bandit)
-        run: |
-          bandit -r .
+      - name: Run Bandit (Python SAST)
+        run: bandit -r .
 
-      - name: Check Dependencies for Vulnerabilities
-        run: |
-          safety check
+      - name: Run Safety (Dependency Scan)
+        run: safety check
+
+      - name: Run Semgrep (Advanced SAST)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: "p/security-audit"
+
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          format: "table"
+
+      - name: Run Secret Scan (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+
+      - name: Run Prompt Injection Security Test
+        run: python llm_security_tests/prompt_injection_test.py
